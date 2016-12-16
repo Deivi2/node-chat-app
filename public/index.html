@@ -8,6 +8,25 @@
     <title>Document</title>
 </head>
 <body>
+<p>Welcome to chat app</p>
 
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    //request initiate connection from client and keep connection open
+    var socket = io();
+
+    //listen to event
+    socket.on('connect', ()=> {
+       console.log('connected to server');
+    });
+
+
+
+    socket.on('disconnect', () => {
+        console.log('Disconnected form server');
+    })
+
+
+</script>
 </body>
 </html>
