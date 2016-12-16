@@ -26,14 +26,35 @@ io.on('connection', (socket) => {
     // });
 
 
-    socket.on('createMessage',(message) => {
-        console.log('createMessage: ' , message);
-        // emits to every connection
+    socket.emit('newMessage', {
+        from: 'Admin',
+        text: 'Welcome to chat app',
+        createdAt: new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage',{
+        from: 'Admin',
+        text: 'New user joined',
+        createdAt: new Date().getTime()
+    });
+
+
+
+    socket.on('createMessage', (message) => {
+        console.log('createMessage: ', message);
+
+        // emits to every connection(connected user)
         io.emit('newMessage', {
             from: message.from,
             text: message.text,
             createdAt: new Date().getTime()
         });
+        //broadcasting specifies witch user should not get event
+        // socket.broadcast.emit('newMessage', {
+        //     from: message.from,
+        //     text: message.text,
+        //     createdAt: new Date().getTime()
+        // });
     });
 
     //listening event
@@ -42,6 +63,6 @@ io.on('connection', (socket) => {
     })
 });
 
-server.listen(port,() => {
- console.log('Running server on port', port)
+server.listen(port, () => {
+    console.log('Running server on port', port)
 });
