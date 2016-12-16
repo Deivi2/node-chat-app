@@ -10,6 +10,6 @@ app.use(express.static(publicpath));
 
 
 
-app.listen(post,() => {
+app.listen(port,() => {
  console.log('Running server on port', port)
 });
