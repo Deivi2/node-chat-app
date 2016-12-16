@@ -1,6 +1,6 @@
 const path = require('path');
 
-const http = require('http');
+const http = require("http");
 const express = require('express');
 const socketIO = require('socket.io');
 
@@ -19,15 +19,21 @@ app.use(express.static(publicpath));
 io.on('connection', (socket) => {
     console.log('new user connected');
 
-    //creating event
-    socket.emit('createMessage', {
-        from: 'pupa@example.com',
-        text: 'gerai :)',
-    });
+    // //creating event to single connection
+    // socket.emit('createMessage', {
+    //     from: 'pupa@example.com',
+    //     text: 'gerai :)',
+    // });
 
 
-    socket.on('newMessage',(newMessage) => {
-        console.log('new message' , newMessage);
+    socket.on('createMessage',(message) => {
+        console.log('createMessage: ' , message);
+        // emits to every connection
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text,
+            createdAt: new Date().getTime()
+        });
     });
 
     //listening event
