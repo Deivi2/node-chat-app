@@ -22,7 +22,22 @@ function scrollToBottom() {
 
 //listen to event
 socket.on('connect', function () {
-    console.log('connected to server');
+    //console.log('connected to server');
+    var params = $.deparam(window.location.search);
+
+    socket.emit('join', params, function (err) {
+        if(err){
+            alert(err);
+            //redirecting to root page
+            window.location.href = '/';
+        }else {
+            console.log('no error');
+
+        }
+
+    });
+
+
     // socket.emit('newMessage', {
     //     from: 'Deivi2',
     //     text: 'Pupa prasiskiesk ikisiu',
@@ -32,6 +47,18 @@ socket.on('connect', function () {
 
 socket.on('disconnect', function () {
     console.log('Disconnected form server');
+});
+
+
+socket.on('updateUserList', function (users) {
+    var ul = $('<ol></ol>');
+
+
+    users.forEach(function (user) {
+       ul.append($('<li></li>').text(user))
+    });
+
+    $('#users').html(ul);
 });
 
 
