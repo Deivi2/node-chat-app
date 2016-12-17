@@ -13,7 +13,7 @@ var server = http.createServer(app);
 //telling server to use socket io
 var io = socketIO(server);
 
-//middleware that starts index.html file
+//middleware that starts chat.html file
 app.use(express.static(publicpath));
 
 //lets register event listener
