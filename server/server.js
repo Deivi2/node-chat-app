@@ -38,8 +38,8 @@ io.on('connection', (socket) => {
     // socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
     socket.on('join', (params, callback) => {
-        if(!isRealString(params.name) || !isRealString(params.room)){
-           return callback('Name and room name are required');
+        if (!isRealString(params.name) || !isRealString(params.room)) {
+            return callback('Name and room name are required');
         }
         // emit chat messages to peoples in the room // it will let emit to everybody or people in specific rooms
         // join the room socket.join('Room name');
@@ -60,9 +60,13 @@ io.on('connection', (socket) => {
 
 // on create message
     socket.on('createMessage', (message, callback) => {
-        console.log('createMessage: ', message);
+        //   console.log('createMessage: ', message);
         // emits to every connected(connected user)
-        io.emit('newMessage', generateMessage(message.from, message.text));
+
+        var user = users.getUser(socket.id);
+        if (user && isRealString(message.text)) {
+            io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+        }
         callback();
         //broadcasting specifies witch user should not get event
         // socket.broadcast.emit('newMessage', {
@@ -73,7 +77,15 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createLocationMessage', (coords) => {
-        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
+
+
+        var user = users.getUser(socket.id);
+        console.log(socket.id);
+        if (user) {
+            io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude))
+        }
+
+
     });
 
     //listening event
@@ -82,10 +94,9 @@ io.on('connection', (socket) => {
 
         var user = users.removeUser(socket.id);
 
-        if(user){
+        if (user) {
             io.to(user.room).emit('updateUserList', users.getUserList(user.room));
             io.to(user.room).emit('newMessage', generateMessage('Admin,', `${user.name} has left`));
-
 
 
         }
