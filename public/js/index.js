@@ -1,6 +1,7 @@
 //request initiate connection from client and keep connection open
 var socket = io();
 
+
 //listen to event
 socket.on('connect', function () {
     console.log('connected to server');
@@ -31,9 +32,10 @@ $("#message-form").on('submit', function (e) {
 
 //to get posted message
 socket.on('newMessage', function (message) {
+    var formatedTime = moment(message.createdAt).format('h:mm a');
     console.log('newMessage', message);
     var li = $('<li></li>');
-    li.text(`${message.from}: ${message.text}`);
+    li.text(`${message.from} ${formatedTime}: ${message.text}`);
 
     $('#messages').append(li);
 });
@@ -42,11 +44,12 @@ socket.on('newMessage', function (message) {
 // generate new location message
 
 socket.on('newLocationMessage', function (message) {
+    var formatedTime = moment(message.createdAt).format('h:mm a');
 
     var li = $('<li></li>');
     var a = $('<a target="_blank">My current location</a>');
 
-    li.text(`${message.from}: `);
+    li.text(`${message.from}: ${formatedTime} `);
     a.attr('href', message.url);
     li.append(a);
     $('#messages').append(li);
@@ -57,6 +60,8 @@ socket.on('newLocationMessage', function (message) {
 
 var locationButton = $('#send-location');
 locationButton.on('click', function(){
+
+
    if(!navigator.geolocation){
        return alert('Geolocation not supported by your browser.')
    }
