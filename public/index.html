@@ -10,8 +10,18 @@
 <body>
 <p>Welcome to chat app</p>
 
+<ol id="messages"></ol>
+
+<form id="message-form">
+    <input name="message" types="text" placeholder="Message"/>
+    <button>send</button>
+</form>
+
+
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/libs/jquery-3.1.1.min.js"></script>
 <script src="/js/index.js"></script>
+
 
 </body>
 </html>

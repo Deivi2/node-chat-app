@@ -33,11 +33,11 @@ io.on('connection', (socket) => {
 
 
 // on create message
-    socket.on('createMessage', (message) => {
+    socket.on('createMessage', (message, callback) => {
         console.log('createMessage: ', message);
-
         // emits to every connection(connected user)
         io.emit('newMessage', generateMessage(message.from, message.text));
+        callback('This is from the server');
         //broadcasting specifies witch user should not get event
         // socket.broadcast.emit('newMessage', {
         //     from: message.from,

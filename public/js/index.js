@@ -17,8 +17,23 @@ socket.on('disconnect', function () {
 
 socket.on('newMessage', function (message) {
     console.log('newMessage', message);
+    var li = $('<li></li>');
+    li.text(`${message.from}: ${message.text}`);
+
+    $('#messages').append(li);
 });
 
-socket.on('newAdminMessage', function (adminMessage) {
-    console.log('newAdminMessage', adminMessage);
+
+jQuery("#message-form").on('submit', function (e) {
+
+    var eee = e;
+
+    eee.preventDefault();
+
+    socket.emit('createMessage', {
+        from: 'User',
+        text: jQuery('[name=message]').val()
+    },function () {
+        
+    });
 });
